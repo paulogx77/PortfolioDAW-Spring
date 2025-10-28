@@ -1,7 +1,7 @@
 package ifpb.edu.br.portfolio.service;
 
 import ifpb.edu.br.portfolio.model.Project;
-import ifpb.edu.br.portfolio.repository.ProjectRepository;
+import ifpb.edu.br.portfolio.dao.ProjectDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.Optional;
 public class ProjectService {
 
     @Autowired
-    private ProjectRepository projectRepository;
+    private ProjectDAO projectRepository;
 
     public List<Project> getAllProjects() {
         return projectRepository.findAll();

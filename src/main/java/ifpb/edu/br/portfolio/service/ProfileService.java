@@ -1,7 +1,7 @@
 package ifpb.edu.br.portfolio.service;
 
 import ifpb.edu.br.portfolio.model.Profile;
-import ifpb.edu.br.portfolio.repository.ProfileRepository;
+import ifpb.edu.br.portfolio.dao.ProfileDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.Optional;
 public class ProfileService {
 
     @Autowired
-    private ProfileRepository profileRepository;
+    private ProfileDAO profileRepository;
 
     public List<Profile> getAllProfiles() {
         return profileRepository.findAll();

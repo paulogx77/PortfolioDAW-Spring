@@ -1,7 +1,7 @@
 package ifpb.edu.br.portfolio.service;
 
 import ifpb.edu.br.portfolio.model.Comment;
-import ifpb.edu.br.portfolio.repository.CommentRepository;
+import ifpb.edu.br.portfolio.dao.CommentDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.Optional;
 public class CommentService {
 
     @Autowired
-    private CommentRepository commentRepository;
+    private CommentDAO commentRepository;
 
     public List<Comment> getAllComments() {
         return commentRepository.findAll();
