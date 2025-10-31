@@ -20,15 +20,6 @@ public class Comment {
     @Column(name = "data_criacao", updatable = false)
     private LocalDateTime dataCriacao = LocalDateTime.now();
 
-    // RELACIONAMENTOS
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "project_id", nullable = false)
-    private Project project;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -48,7 +39,7 @@ public class Comment {
     public String toString() {
         return "Comment{" +
                 "id=" + id +
-                ", content='" + (content.length() > 30 ? content.substring(0, 27) + "..." : content) + '\'' +
+                ", content='" + (texto.length() > 30 ? texto.substring(0, 27) + "..." : texto) + '\'' +
                 ", dataCriacao=" + dataCriacao +
                 '}';
     }

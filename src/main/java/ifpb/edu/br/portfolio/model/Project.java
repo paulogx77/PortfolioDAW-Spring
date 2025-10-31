@@ -26,14 +26,6 @@ public class Project {
     @Column(name = "data_publicacao", updatable = false)
     private LocalDateTime dataPublicacao = LocalDateTime.now();
 
-    // RELACIONAMENTOS
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "profile_id", nullable = false)
-    private Profile profile;
-
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> comments;
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -53,8 +45,8 @@ public class Project {
     public String toString() {
         return "Project{" +
                 "id=" + id +
-                ", title='" + title + '\'' +
-                ", dataCriacao=" + dataCriacao +
+                ", title='" + titulo + '\'' +
+                ", dataCriacao=" + dataPublicacao +
                 '}';
     }
 }

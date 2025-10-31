@@ -16,7 +16,6 @@ import java.util.Objects;
 @Table(name = "users") // "user" é uma palavra reservada em muitos bancos, então "users" é mais seguro
 public class User {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -25,13 +25,6 @@ public class Profile {
     @Column(columnDefinition = "TEXT")
     private String biografia;
 
-    // RELACIONAMENTOS
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "id", unique = true, nullable = false)
-    private User user;
-
-    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Project> projects;
 
     @Override
     public boolean equals(Object o) {
@@ -52,8 +45,8 @@ public class Profile {
     public String toString() {
         return "Profile{" +
                 "id=" + id +
-                ", nomeCompleto='" + nomeCompleto + '\'' +
-                ", bio='" + (bio != null && bio.length() > 30 ? bio.substring(0, 27) + "..." : bio) + '\'' +
+                ", nomeCompleto='" + nome + '\'' +
+                ", bio='" + (biografia != null && biografia.length() > 30 ? biografia.substring(0, 27) + "..." : biografia) + '\'' +
                 '}';
     }
 }
