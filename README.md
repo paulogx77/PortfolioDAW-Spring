@@ -69,8 +69,8 @@ Toda a configuração de conexão com o banco de dados está centralizada no arq
 <persistence-unit name="portfolio" ...>
 
     <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/portfolio_db"/>
-    <property name="jakarta.persistence.jdbc.user" value="seu_usuario_aqui"/>
-    <property name="jakarta.persistence.jdbc.password" value="sua_senha_aqui"/>
+    <property name="jakarta.persistence.jdbc.user" value="paulo"/>
+    <property name="jakarta.persistence.jdbc.password" value="tresdois"/>
     
     <property name="hibernate.hbm2ddl.auto" value="create"/>
 </persistence-unit>
