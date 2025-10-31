@@ -1,9 +1,11 @@
 package ifpb.edu.br.portfolio.dao;
 
+import ifpb.edu.br.portfolio.model.Project;
+
 import java.util.List;
 
 public interface DAO<E, T>{
-    void save(E obj) throws PersistenciaDawException;
+    Project save(E obj) throws PersistenciaDawException;
 
     E update(E obj) throws PersistenciaDawException;
 

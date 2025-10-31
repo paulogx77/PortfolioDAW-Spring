@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  # Define o serviço do banco de dados PostgreSQL
+  db:
+    image: postgres:15-alpine  # Usa uma imagem oficial e leve do PostgreSQL
+    container_name: portfolio-db # Nome do container
+    environment:
+      # Define as variáveis de ambiente para o banco de dados
+      # ATENÇÃO: Estes valores DEVEM ser os mesmos do seu persistence.xml
+      POSTGRES_DB: portfolio_db
+      POSTGRES_USER: paulo
+      POSTGRES_PASSWORD: tresdois
+    ports:
+      - "5432:5432"
+    volumes:
+      # (Opcional, mas recomendado) Cria um volume para persistir os dados
+      - postgres-data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  postgres-data:

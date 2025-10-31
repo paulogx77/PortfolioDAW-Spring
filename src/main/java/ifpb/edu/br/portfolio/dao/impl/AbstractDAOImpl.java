@@ -2,8 +2,7 @@ package ifpb.edu.br.portfolio.dao.impl;
 
 import ifpb.edu.br.portfolio.dao.PersistenciaDawException;
 import ifpb.edu.br.portfolio.dao.DAO;
-import ifpb.edu.br.portfolio.dao.PersistenciaDawException;
-import ifpb.edu.br.portfolio.dao.DAO;
+import ifpb.edu.br.portfolio.model.Project;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
@@ -28,7 +27,7 @@ public abstract class AbstractDAOImpl<E, T> implements DAO<E, T> {
     }
 
     @Override
-    public void save(E obj) throws PersistenciaDawException {
+    public Project save(E obj) throws PersistenciaDawException {
         try(EntityManager em = getEntityManager()) {
             EntityTransaction transaction = em.getTransaction();
             transaction.begin();
@@ -43,6 +42,7 @@ public abstract class AbstractDAOImpl<E, T> implements DAO<E, T> {
                 throw new PersistenciaDawException("Ocorreu algum erro ao tentar salvar a entidade.", pe);
             }
         }
+        return null;
     }
 
     @Override

@@ -7,9 +7,10 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
 public class ProjectDAOImpl extends AbstractDAOImpl<Project, Long> implements ProjectDAO {
+
     private static final EntityManagerFactory EMF =
             Persistence.createEntityManagerFactory("portfolio");
-    // Construtor obrigatório para a classe base
+
     public ProjectDAOImpl() {
         super(Project.class, EMF);
     }

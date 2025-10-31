@@ -9,11 +9,9 @@ public class MainCommentSave {
         CommentDAOImpl dao = new CommentDAOImpl();
         Comment comment = new Comment();
 
-        // REGRA 13: Garante conteúdo diferente a cada execução
         String uniqueContent = "Comentário de teste n. " + System.nanoTime();
 
-        comment.setTexto(uniqueContent); // Usando o campo 'texto' corrigido
-        // dataCriacao é automático na Entidade
+        comment.setTexto(uniqueContent);
 
         try {
             dao.save(comment);

@@ -9,12 +9,11 @@ public class MainProfileSave {
         ProfileDAOImpl dao = new ProfileDAOImpl();
         Profile profile = new Profile();
 
-        // REGRA 13: Usando nanoTime para garantir que o nomeCompleto seja diferente,
-        // caso haja uma restrição de unicidade oculta.
         String uniqueName = "Usuário Teste " + System.nanoTime();
 
         profile.setNome(uniqueName);
         profile.setBiografia("Sou um desenvolvedor de testes JPA.");
+        profile.setCargo("Desenvolvedor de Software");
 
         try {
             dao.save(profile);

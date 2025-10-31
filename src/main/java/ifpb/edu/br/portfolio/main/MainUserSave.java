@@ -9,12 +9,10 @@ public class MainUserSave {
         UserDAOImpl dao = new UserDAOImpl();
         User user = new User();
 
-        // REGRA 13: Garante unicidade usando System.nanoTime() para o email
         String uniqueEmail = "usuario." + System.nanoTime() + "@ifpb.edu.br";
 
         user.setEmail(uniqueEmail);
         user.setSenha("senha123");
-        // dataCriacao é automático na Entidade
 
         try {
             dao.save(user); // O método save é herdado do AbstractDAOImpl

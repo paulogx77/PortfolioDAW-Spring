@@ -9,12 +9,10 @@ public class MainProjectSave {
         ProjectDAOImpl dao = new ProjectDAOImpl();
         Project project = new Project();
 
-        // REGRA 13: Embora 'title' possa não ser único, é bom para demonstração.
         String uniqueTitle = "Projeto DAW " + System.currentTimeMillis();
 
         project.setTitulo(uniqueTitle);
         project.setDescricao("Descrição detalhada do projeto de persistência.");
-        // dataCriacao é automático na Entidade
 
         try {
             dao.save(project);

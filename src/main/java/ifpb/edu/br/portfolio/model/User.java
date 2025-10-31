@@ -13,7 +13,7 @@ import java.util.Objects;
 @Setter
 @Data
 @Entity
-@Table(name = "users") // "user" é uma palavra reservada em muitos bancos, então "users" é mais seguro
+@Table(name = "users")
 public class User {
 
     @Id
@@ -32,21 +32,16 @@ public class User {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        // Verifica se o ID é nulo (entidade nova) ou se a classe é diferente
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        // A igualdade entre entidades é definida pelo seu identificador (ID)
         return Objects.equals(id, user.id);
     }
 
-    // Regra 11: hashCode (baseado apenas no ID, padrão JPA)
     @Override
     public int hashCode() {
-        // Gera o hash usando apenas o ID
         return Objects.hash(id);
     }
 
-    // Regra 12: toString (Inclui campos importantes)
     @Override
     public String toString() {
         return "User{" +

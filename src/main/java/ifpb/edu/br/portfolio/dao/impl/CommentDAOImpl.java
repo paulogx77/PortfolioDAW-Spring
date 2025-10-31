@@ -6,10 +6,12 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
 public class CommentDAOImpl extends AbstractDAOImpl<Comment, Long> implements CommentDAO {
+
     private static final EntityManagerFactory EMF =
             Persistence.createEntityManagerFactory("portfolio");
-    // Construtor obrigatório para a classe base
+
     public CommentDAOImpl() {
         super(Comment.class, EMF);
     }
+
 }
