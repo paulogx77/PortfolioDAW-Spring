@@ -10,8 +10,7 @@ public class MainUserDeleteAll {
         UserDAOImpl dao = new UserDAOImpl();
 
         try {
-            List<User> users = dao.getAll(); // Método herdado
-
+            List<User> users = dao.getAll();
             if (users.isEmpty()) {
                 System.out.println("Nenhum usuário encontrado para remoção.");
                 return;
@@ -20,14 +19,14 @@ public class MainUserDeleteAll {
             System.out.println("Removendo " + users.size() + " usuários...");
 
             for (User user : users) {
-                dao.delete(user.getId()); // O método delete usa a Chave Primária (ID)
-                System.out.println("  - Removido usuário ID: " + user.getId());
+                dao.delete(user.getId());
+                System.out.println("  - Removido usuário ID: " + user.getId() + " (e todos os seus dados em cascata)");
             }
 
             System.out.println("✅ REMOÇÃO DE TODOS OS USUÁRIOS CONCLUÍDA.");
 
         } catch (PersistenciaDawException e) {
-            System.err.println("❌ ERRO DE PERSISTÊNCIA ao remover usuários: " + e.getMessage());
+            System.err.println("❌ ERRO DE PERSISTÊNCIA: " + e.getMessage());
         }
     }
 }

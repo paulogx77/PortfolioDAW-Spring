@@ -10,8 +10,7 @@ public class MainProfileDeleteAll {
         ProfileDAOImpl dao = new ProfileDAOImpl();
 
         try {
-            List<Profile> profiles = dao.getAll(); // Método herdado
-
+            List<Profile> profiles = dao.getAll();
             if (profiles.isEmpty()) {
                 System.out.println("Nenhum perfil encontrado para remoção.");
                 return;
@@ -27,7 +26,7 @@ public class MainProfileDeleteAll {
             System.out.println("✅ REMOÇÃO DE TODOS OS PERFIS CONCLUÍDA.");
 
         } catch (PersistenciaDawException e) {
-            System.err.println("❌ ERRO DE PERSISTÊNCIA ao remover perfis: " + e.getMessage());
+            System.err.println("❌ ERRO DE PERSISTÊNCIA: " + e.getMessage());
         }
     }
 }

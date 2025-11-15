@@ -10,8 +10,7 @@ public class MainProjectDeleteAll {
         ProjectDAOImpl dao = new ProjectDAOImpl();
 
         try {
-            List<Project> projects = dao.getAll(); // Método herdado
-
+            List<Project> projects = dao.getAll();
             if (projects.isEmpty()) {
                 System.out.println("Nenhum projeto encontrado para remoção.");
                 return;
@@ -21,13 +20,13 @@ public class MainProjectDeleteAll {
 
             for (Project project : projects) {
                 dao.delete(project.getId());
-                System.out.println("  - Removido projeto ID: " + project.getId());
+                System.out.println("  - Removido projeto ID: " + project.getId() + " (e seus comentários em cascata)");
             }
 
             System.out.println("✅ REMOÇÃO DE TODOS OS PROJETOS CONCLUÍDA.");
 
         } catch (PersistenciaDawException e) {
-            System.err.println("❌ ERRO DE PERSISTÊNCIA ao remover projetos: " + e.getMessage());
+            System.err.println("❌ ERRO DE PERSISTÊNCIA: " + e.getMessage());
         }
     }
 }

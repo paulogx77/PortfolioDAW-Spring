@@ -10,8 +10,7 @@ public class MainCommentDeleteAll {
         CommentDAOImpl dao = new CommentDAOImpl();
 
         try {
-            List<Comment> comments = dao.getAll(); // Método herdado
-
+            List<Comment> comments = dao.getAll();
             if (comments.isEmpty()) {
                 System.out.println("Nenhum comentário encontrado para remoção.");
                 return;
@@ -20,14 +19,14 @@ public class MainCommentDeleteAll {
             System.out.println("Removendo " + comments.size() + " comentários...");
 
             for (Comment comment : comments) {
-                dao.delete(comment.getId()); // Usa o ID para remoção
+                dao.delete(comment.getId());
                 System.out.println("  - Removido comentário ID: " + comment.getId());
             }
 
             System.out.println("✅ REMOÇÃO DE TODOS OS COMENTÁRIOS CONCLUÍDA.");
 
         } catch (PersistenciaDawException e) {
-            System.err.println("❌ ERRO DE PERSISTÊNCIA ao remover comentários: " + e.getMessage());
+            System.err.println("❌ ERRO DE PERSISTÊNCIA: " + e.getMessage());
         }
     }
 }

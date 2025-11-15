@@ -1,11 +1,8 @@
 package ifpb.edu.br.portfolio.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import java.util.List;
 import java.util.Objects;
 
-@Data
 @Entity
 @Table(name = "profiles")
 public class Profile {
@@ -14,18 +11,44 @@ public class Profile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String nome;
+    @Column(name = "nome_completo", nullable = false)
+    private String nomeCompleto;
 
-    @Column(nullable = false)
+    @Column(name = "cargo", nullable = false) // Adicionando o campo 'cargo' que faltava
     private String cargo;
 
+    @Column(columnDefinition = "TEXT")
+    private String bio;
+
+    // (Opcional, se você tiver)
     private String imagemUrl;
 
-    @Column(columnDefinition = "TEXT")
-    private String biografia;
+    // --- RELACIONAMENTO ADICIONADO (REGRA 2) ---
 
+    // Um Profile pertence a um User
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false, unique = true) // Define a chave estrangeira
+    private User user;
 
+    // --- FIM DOS RELACIONAMENTOS ---
+
+    public Profile() {}
+
+    // Getters e Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    public String getNomeCompleto() { return nomeCompleto; }
+    public void setNomeCompleto(String nomeCompleto) { this.nomeCompleto = nomeCompleto; }
+    public String getCargo() { return cargo; }
+    public void setCargo(String cargo) { this.cargo = cargo; }
+    public String getBio() { return bio; }
+    public void setBio(String bio) { this.bio = bio; }
+    public String getImagemUrl() { return imagemUrl; }
+    public void setImagemUrl(String imagemUrl) { this.imagemUrl = imagemUrl; }
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
+
+    // Regra 10: equals (não muda)
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -34,19 +57,20 @@ public class Profile {
         return Objects.equals(id, profile.id);
     }
 
-    // Regra 11: hashCode
+    // Regra 11: hashCode (não muda)
     @Override
     public int hashCode() {
         return Objects.hash(id);
     }
 
-    // Regra 12: toString
+    // Regra 12: toString (MODIFICADO PARA EVITAR RECURSÃO)
     @Override
     public String toString() {
         return "Profile{" +
                 "id=" + id +
-                ", nomeCompleto='" + nome + '\'' +
-                ", bio='" + (biografia != null && biografia.length() > 30 ? biografia.substring(0, 27) + "..." : biografia) + '\'' +
+                ", nomeCompleto='" + nomeCompleto + '\'' +
+                ", cargo='" + cargo + '\'' +
+                // Não inclua 'user' aqui!
                 '}';
     }
 }
