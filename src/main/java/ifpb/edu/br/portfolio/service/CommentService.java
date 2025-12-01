@@ -1,9 +1,9 @@
 package ifpb.edu.br.portfolio.service;
 
 import ifpb.edu.br.portfolio.dao.PersistenciaDawException;
-import ifpb.edu.br.portfolio.model.Comment;
 import ifpb.edu.br.portfolio.dao.CommentDAO;
-import ifpb.edu.br.portfolio.model.Project;
+import ifpb.edu.br.portfolio.model.Comment;
+// import ifpb.edu.br.portfolio.model.Project; // Não precisa mais importar Project
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -23,7 +23,9 @@ public class CommentService {
         return Optional.ofNullable(commentRepository.getByID(id));
     }
 
-    public Project saveComment(Comment comment) throws PersistenciaDawException {
+    // --- CORREÇÃO AQUI ---
+    // O tipo de retorno deve ser Comment (e não Project)
+    public Comment saveComment(Comment comment) throws PersistenciaDawException {
         return commentRepository.save(comment);
     }
 

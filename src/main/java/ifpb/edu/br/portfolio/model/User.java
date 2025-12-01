@@ -2,12 +2,12 @@ package ifpb.edu.br.portfolio.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList; // Importar
-import java.util.List;     // Importar
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "users")
+@Table(name = "usuario") // Nome conforme diagrama
 public class User {
 
     @Id
@@ -20,47 +20,41 @@ public class User {
     @Column(nullable = false)
     private String senha;
 
-    @Column(name = "data_criacao", updatable = false)
+    // Mantendo LocalDateTime e o nome setDataCriacao para corrigir seu erro anterior
+    @Column(name = "criacao_data", updatable = false)
     private LocalDateTime dataCriacao = LocalDateTime.now();
 
-    // --- RELACIONAMENTOS ADICIONADOS (REGRA 2) ---
+    // --- RELACIONAMENTOS ---
 
-    // Um User tem um Profile
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    // 1. Um User tem um Profile (1:1)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Profile profile;
 
-    // Um User (owner) tem muitos Projects
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Project> projects = new ArrayList<>(); // Inicializar a lista
+    // 2. Um User escreve muitos Comments (1:N)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
 
-    // Um User tem muitos Comments
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Comment> comments = new ArrayList<>(); // Inicializar a lista
+    // OBS: Removemos 'projects' daqui, pois o projeto pertence ao PERFIL no diagrama.
 
-    // --- FIM DOS RELACIONAMENTOS ---
-
-    // Construtor padrão
     public User() {}
 
-    // Getters e Setters (Manuais, sem Lombok)
+    // --- Getters e Setters ---
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
     public String getSenha() { return senha; }
     public void setSenha(String senha) { this.senha = senha; }
+
     public LocalDateTime getDataCriacao() { return dataCriacao; }
     public void setDataCriacao(LocalDateTime dataCriacao) { this.dataCriacao = dataCriacao; }
 
-    // Getters/Setters para os relacionamentos
     public Profile getProfile() { return profile; }
     public void setProfile(Profile profile) { this.profile = profile; }
-    public List<Project> getProjects() { return projects; }
-    public void setProjects(List<Project> projects) { this.projects = projects; }
+
     public List<Comment> getComments() { return comments; }
     public void setComments(List<Comment> comments) { this.comments = comments; }
 
-    // Regra 10: equals (baseado apenas no ID, não muda)
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -69,19 +63,8 @@ public class User {
         return Objects.equals(id, user.id);
     }
 
-    // Regra 11: hashCode (baseado apenas no ID, não muda)
     @Override
     public int hashCode() {
         return Objects.hash(id);
-    }
-
-    // Regra 12: toString (MODIFICADO PARA EVITAR RECURSÃO)
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", email='" + email + '\'' +
-                ", dataCriacao=" + dataCriacao +
-                '}';
     }
 }

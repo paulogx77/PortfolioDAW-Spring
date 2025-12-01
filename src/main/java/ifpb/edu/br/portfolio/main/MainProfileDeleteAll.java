@@ -1,32 +1,40 @@
 package ifpb.edu.br.portfolio.main;
 
-import ifpb.edu.br.portfolio.dao.impl.ProfileDAOImpl;
+import ifpb.edu.br.portfolio.PortfolioApplication; // Sua classe principal
+import ifpb.edu.br.portfolio.dao.ProfileDAO;
 import ifpb.edu.br.portfolio.model.Profile;
-import ifpb.edu.br.portfolio.dao.PersistenciaDawException;
+import org.springframework.boot.SpringApplication;
+import org.springframework.context.ConfigurableApplicationContext;
+
 import java.util.List;
 
 public class MainProfileDeleteAll {
+
     public static void main(String[] args) {
-        ProfileDAOImpl dao = new ProfileDAOImpl();
+        // 1. Acorda o Spring
+        ConfigurableApplicationContext context = SpringApplication.run(PortfolioApplication.class, args);
 
         try {
-            List<Profile> profiles = dao.getAll();
+            // 2. Pede o DAO para o Spring
+            ProfileDAO profileDAO = context.getBean(ProfileDAO.class);
+
+            // 3. Lógica
+            List<Profile> profiles = profileDAO.getAll();
+
             if (profiles.isEmpty()) {
-                System.out.println("Nenhum perfil encontrado para remoção.");
-                return;
+                System.out.println("Nenhum perfil para deletar.");
+            } else {
+                for (Profile p : profiles) {
+                    profileDAO.delete(p.getId());
+                    System.out.println("🗑️ Deletado perfil ID: " + p.getId());
+                }
             }
 
-            System.out.println("Removendo " + profiles.size() + " perfis...");
-
-            for (Profile profile : profiles) {
-                dao.delete(profile.getId());
-                System.out.println("  - Removido perfil ID: " + profile.getId());
-            }
-
-            System.out.println("✅ REMOÇÃO DE TODOS OS PERFIS CONCLUÍDA.");
-
-        } catch (PersistenciaDawException e) {
-            System.err.println("❌ ERRO DE PERSISTÊNCIA: " + e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // 4. Dorme o Spring
+            context.close();
         }
     }
 }

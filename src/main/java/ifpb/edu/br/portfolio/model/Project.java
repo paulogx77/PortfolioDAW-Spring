@@ -1,13 +1,11 @@
 package ifpb.edu.br.portfolio.model;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
-import java.util.ArrayList; // Importar
-import java.util.List;     // Importar
-import java.util.Objects;
+import java.time.LocalDate;
+import java.util.List;
 
 @Entity
-@Table(name = "projects")
+@Table(name = "projeto")
 public class Project {
 
     @Id
@@ -15,73 +13,42 @@ public class Project {
     private Long id;
 
     @Column(nullable = false)
-    private String title;
+    private String titulo;
 
-    @Column(columnDefinition = "TEXT", nullable = false) // 'description'
-    private String description;
+    @Column(columnDefinition = "TEXT")
+    private String descricao;
 
-    // (Opcional, se você tiver)
+    @Column(name = "imagem_capaurl")
     private String imagemCapaUrl;
 
-    @Column(name = "data_criacao", updatable = false)
-    private LocalDateTime dataCriacao = LocalDateTime.now();
+    @Column(name = "data_pub")
+    private LocalDate dataPub = LocalDate.now();
 
-    // --- RELACIONAMENTOS ADICIONADOS (REGRA 2) ---
+    // VINCULO CORRETO: Projeto pertence a um Perfil
+    @ManyToOne
+    @JoinColumn(name = "perfil_id", nullable = false)
+    private Profile profile;
 
-    // Muitos Projects pertencem a um User (owner)
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "owner_id", nullable = false)
-    private User owner;
-
-    // Um Project tem muitos Comments
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Comment> comments = new ArrayList<>(); // Inicializar a lista
-
-    // --- FIM DOS RELACIONAMENTOS ---
+    @OneToMany(mappedBy = "project", cascade = CascadeType.REMOVE)
+    private List<Comment> comments;
 
     public Project() {}
 
     // Getters e Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
-    public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+    public String getTitulo() { return titulo; }
+    public void setTitulo(String titulo) { this.titulo = titulo; }
+    public String getDescricao() { return descricao; }
+    public void setDescricao(String descricao) { this.descricao = descricao; }
     public String getImagemCapaUrl() { return imagemCapaUrl; }
     public void setImagemCapaUrl(String imagemCapaUrl) { this.imagemCapaUrl = imagemCapaUrl; }
-    public LocalDateTime getDataCriacao() { return dataCriacao; }
-    public void setDataCriacao(LocalDateTime dataCriacao) { this.dataCriacao = dataCriacao; }
+    public LocalDate getDataPub() { return dataPub; }
+    public void setDataPub(LocalDate dataPub) { this.dataPub = dataPub; }
 
-    // Getters/Setters para os relacionamentos
-    public User getOwner() { return owner; }
-    public void setOwner(User owner) { this.owner = owner; }
+    public Profile getProfile() { return profile; }
+    public void setProfile(Profile profile) { this.profile = profile; }
+
     public List<Comment> getComments() { return comments; }
     public void setComments(List<Comment> comments) { this.comments = comments; }
-
-    // Regra 10: equals (não muda)
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Project project = (Project) o;
-        return Objects.equals(id, project.id);
-    }
-
-    // Regra 11: hashCode (não muda)
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
-
-    // Regra 12: toString (MODIFICADO PARA EVITAR RECURSÃO)
-    @Override
-    public String toString() {
-        return "Project{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", dataCriacao=" + dataCriacao +
-                // Não inclua 'owner' ou 'comments' aqui!
-                '}';
-    }
 }

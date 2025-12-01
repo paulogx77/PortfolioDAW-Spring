@@ -29,7 +29,7 @@ public class CommentController {
     }
 
     @PostMapping
-    public Project createComment(@RequestBody Comment comment) throws PersistenciaDawException {
+    public Comment createComment(@RequestBody Comment comment) throws PersistenciaDawException {
         return commentService.saveComment(comment);
     }
 

@@ -15,9 +15,9 @@
 
         <properties>
             <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
-            <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/portfolio_db"/>
-            <property name="jakarta.persistence.jdbc.user" value="paulo"/>
-            <property name="jakarta.persistence.jdbc.password" value="tresdois"/>
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:5434/portfolio_db"/>
+            <property name="jakarta.persistence.jdbc.user" value="portifolio"/>
+            <property name="jakarta.persistence.jdbc.password" value="1234"/>
 
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
             <property name="hibernate.hbm2ddl.auto" value="create"/>

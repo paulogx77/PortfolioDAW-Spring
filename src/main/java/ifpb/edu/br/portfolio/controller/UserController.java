@@ -1,7 +1,6 @@
 package ifpb.edu.br.portfolio.controller;
 
 import ifpb.edu.br.portfolio.dao.PersistenciaDawException;
-import ifpb.edu.br.portfolio.model.Project;
 import ifpb.edu.br.portfolio.model.User;
 import ifpb.edu.br.portfolio.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,54 +11,49 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/users") // Ajuste a rota conforme seu gosto (ex: /api/v1/users)
 public class UserController {
 
-    private final UserService userService;
-
     @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
+    private UserService userService;
 
     @GetMapping
-    public List<User> findAllUsers() throws PersistenciaDawException {
+    public List<User> getAllUsers() throws PersistenciaDawException {
         return userService.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> findUserById(@PathVariable Long id) {
+    public ResponseEntity<User> getUserById(@PathVariable Long id) {
         User user = userService.findById(id);
         if (user != null) {
             return ResponseEntity.ok(user);
-        } else {
-            return ResponseEntity.notFound().build();
         }
+        return ResponseEntity.notFound().build();
     }
 
+    // --- AQUI ESTAVA O ERRO ---
+    // Antes devia estar: public Project createUser(...) ou ResponseEntity<Project>
+    // Agora corrigido para: User
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Project createUser(@RequestBody User user) throws PersistenciaDawException {
-        return userService.save(user);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Project> updateUser(@PathVariable Long id, @RequestBody User userDetails) throws PersistenciaDawException {
-        User existingUser = userService.findById(id);
-
-        if (existingUser != null) {
-            userDetails.setId(id);
-
-            Project updatedUser = userService.save(userDetails);
-            return ResponseEntity.ok(updatedUser);
-        } else {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<User> createUser(@RequestBody User user) {
+        try {
+            User novoUser = userService.save(user);
+            return ResponseEntity.status(HttpStatus.CREATED).body(novoUser);
+        } catch (PersistenciaDawException | IllegalStateException e) {
+            // Retorna erro 400 (Bad Request) se der erro de validação (ex: email duplicado)
+            return ResponseEntity.badRequest().build();
         }
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteUser(@PathVariable Long id) throws PersistenciaDawException {
-        userService.delete(id);
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        try {
+            userService.delete(id);
+            return ResponseEntity.noContent().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        } catch (PersistenciaDawException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }
