@@ -6,9 +6,12 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.PersistenceException;
 import jakarta.persistence.TypedQuery;
+import jakarta.transaction.Transactional;
+
 import java.util.List;
 
 // E deve bater com E da interface DAO
+@Transactional
 public abstract class AbstractDAOImpl<E, K> implements DAO<E, K> {
 
     @PersistenceContext

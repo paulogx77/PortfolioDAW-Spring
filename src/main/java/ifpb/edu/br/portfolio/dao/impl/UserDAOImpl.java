@@ -11,6 +11,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Map; // <--- Importante
+
 @Repository
 @Transactional
 public class UserDAOImpl extends AbstractDAOImpl<User, Long> implements UserDAO {
@@ -26,7 +29,6 @@ public class UserDAOImpl extends AbstractDAOImpl<User, Long> implements UserDAO 
     @Override
     public User findByEmail(String email) throws PersistenciaDawException {
         try {
-            // JPQL usa o nome da Classe e Atributos (User, email)
             String jpql = "SELECT u FROM User u WHERE u.email = :email";
             TypedQuery<User> query = entityManager.createQuery(jpql, User.class);
             query.setParameter("email", email);
@@ -34,7 +36,27 @@ public class UserDAOImpl extends AbstractDAOImpl<User, Long> implements UserDAO 
         } catch (NoResultException e) {
             return null;
         } catch (PersistenceException e) {
-            throw new PersistenciaDawException("Erro ao buscar usuário por e-mail.", e);
+            throw new PersistenciaDawException("Erro ao buscar usuário.", e);
         }
+    }
+
+    // --- AQUI ESTÁ O SEU SQL DIRETO NA CLASSE ---
+    @Override
+    public List<Map<String, Object>> buscarRelatorioGeral() {
+        // SQL: Seleciona Email, Nome do Perfil e Conta quantos projetos o usuário tem.
+        String sql = """
+            SELECT 
+                u.email AS usuario_email, 
+                pf.nome AS nome_perfil, 
+                COUNT(pj.id) AS qtd_projetos
+            FROM usuario u
+            LEFT JOIN perfil pf ON pf.usuario_id = u.id
+            LEFT JOIN projeto pj ON pj.perfil_id = pf.id
+            GROUP BY u.email, pf.nome
+            ORDER BY qtd_projetos DESC
+        """;
+
+        // O queryForList retorna uma lista de mapas: [{usuario_email=..., qtd_projetos=...}, {...}]
+        return jdbcTemplate.queryForList(sql);
     }
 }
