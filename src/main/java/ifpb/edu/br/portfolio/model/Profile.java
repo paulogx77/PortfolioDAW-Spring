@@ -3,10 +3,11 @@ package ifpb.edu.br.portfolio.model;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "perfil")
-public class Profile {
+public class Profile implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

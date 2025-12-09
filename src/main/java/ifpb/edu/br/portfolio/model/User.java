@@ -1,14 +1,19 @@
 package ifpb.edu.br.portfolio.model;
 
 import jakarta.persistence.*;
+
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "usuario") // Nome conforme diagrama
-public class User {
+@Table(name = "usuario")
+public class User implements Serializable { // <--- Implementa Serializable
+
+    // É boa prática ter esse ID para garantir compatibilidade entre versões da classe
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
