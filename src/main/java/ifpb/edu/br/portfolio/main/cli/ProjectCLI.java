@@ -7,6 +7,7 @@ import ifpb.edu.br.portfolio.model.Project;
 import ifpb.edu.br.portfolio.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ifpb.edu.br.portfolio.service.LogService;
 
 import java.util.Scanner;
 
@@ -17,6 +18,8 @@ public class ProjectCLI {
     private ProjectDAO projectDAO;
     @Autowired
     private CommentDAO commentDAO;
+    @Autowired
+    private LogService logService;
 
     // Método para CADASTRAR PROJETO
     public void cadastrarProjeto(Scanner scanner, User usuarioLogado) {
@@ -41,6 +44,7 @@ public class ProjectCLI {
 
             projectDAO.save(project);
             System.out.println("✅ Projeto salvo no seu portfólio!");
+            logService.registrarLog("NEW_PROJECT","Criou projeto: " + project.getTitulo(), usuarioLogado.getEmail());
         } catch (Exception e) {
             System.out.println("❌ Erro: " + e.getMessage());
         }

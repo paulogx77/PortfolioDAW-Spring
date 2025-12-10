@@ -1,20 +1,50 @@
+version: '3.8'
+
 services:
-  # Define o serviço do banco de dados PostgreSQL
-  db:
-    image: postgres:15-alpine  # Usa uma imagem oficial e leve do PostgreSQL
-    container_name: portfolio-db # Nome do container
+  # 1. PostgreSQL (Banco Relacional)
+  postgres:
+    image: postgres:15
+    container_name: portfolio-postgres
+    ports:
+      - "5433:5432" # Mapeando 5433 (seu pc) para 5432 (container)
     environment:
-      # Define as variáveis de ambiente para o banco de dados
-      # ATENÇÃO: Estes valores DEVEM ser os mesmos do seu persistence.xml
       POSTGRES_DB: portfolio_db
       POSTGRES_USER: paulo
       POSTGRES_PASSWORD: tresdois
-    ports:
-      - "5432:5432"
     volumes:
-      # (Opcional, mas recomendado) Cria um volume para persistir os dados
-      - postgres-data:/var/lib/postgresql/data
-    restart: unless-stopped
+      - postgres_data:/var/lib/postgresql/data
+
+  # 2. Redis (Cache)
+  redis:
+    image: redis:alpine
+    container_name: portfolio-redis
+    ports:
+      - "6379:6379"
+
+  # 3. MongoDB (Logs)
+  mongo:
+    image: mongo:latest
+    container_name: portfolio-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  # 4. MinIO (Arquivos/S3)
+  minio:
+    image: quay.io/minio/minio
+    container_name: portfolio-minio
+    command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000" # API
+      - "9001:9001" # Console Visual
+    environment:
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: password123
+    volumes:
+      - minio_data:/data
 
 volumes:
-  postgres-data:
+  postgres_data:
+  mongo_data:
+  minio_data:
