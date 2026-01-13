@@ -7,6 +7,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Map;
+
 @Repository
 @Transactional
 public class ProfileDAOImpl extends AbstractDAOImpl<Profile, Long> implements ProfileDAO {
@@ -19,12 +22,12 @@ public class ProfileDAOImpl extends AbstractDAOImpl<Profile, Long> implements Pr
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    // Exemplo: Se você precisar buscar o ID do perfil via SQL nativo (JDBC)
-    // Cuidado com o nome da coluna 'usuario_id' do mapa conceitual
-    /*
-    public Long buscarIdDoPerfilPorUsuario(Long usuarioId) {
-        String sql = "SELECT id FROM perfil WHERE usuario_id = ?";
-        return jdbcTemplate.queryForObject(sql, Long.class, usuarioId);
+    @Override
+    public List<Map<String, Object>> buscarProximos(double lat, double lon, double raioKm) {
+        // Chama a função PL/pgSQL 'buscar_usuarios_proximos' criada no banco
+        String sql = "SELECT * FROM buscar_usuarios_proximos(?, ?, ?)";
+
+        // O JdbcTemplate mapeia automaticamente o retorno da função (tabela) para List<Map>
+        return jdbcTemplate.queryForList(sql, lat, lon, raioKm);
     }
-    */
 }

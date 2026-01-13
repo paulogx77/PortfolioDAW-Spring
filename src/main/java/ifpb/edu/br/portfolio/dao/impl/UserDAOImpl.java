@@ -18,7 +18,7 @@ import java.util.Map;
 
 @Repository
 @Transactional
-public class UserDAOImpl extends AbstractDAOImpl<User, Long> implements UserDAO {
+public class    UserDAOImpl extends AbstractDAOImpl<User, Long> implements UserDAO {
 
     private final JdbcTemplate jdbcTemplate;
 

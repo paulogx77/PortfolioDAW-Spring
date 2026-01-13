@@ -12,18 +12,15 @@ import java.util.Scanner;
 @Component
 public class SistemaPortfolioCLI implements CommandLineRunner {
 
-    // --- Injeção dos Módulos CLI (Menus Específicos) ---
     @Autowired private AuthCLI authCLI;
     @Autowired private UserCLI userCLI;
     @Autowired private ProfileCLI profileCLI;
     @Autowired private ProjectCLI projectCLI;
     @Autowired private ReportCLI reportCLI;
-    @Autowired private LogCLI logCLI;       // MongoDB (Visualizar Logs)
+    @Autowired private LogCLI logCLI;
 
-    // Injetamos o Service de Log para registrar o Logout manualmente aqui
     @Autowired private LogService logService;
 
-    // Variável que guarda a sessão do usuário (null = não logado)
     private User currentUser = null;
 
     @Override
@@ -34,33 +31,29 @@ public class SistemaPortfolioCLI implements CommandLineRunner {
         System.out.println("\n=============================================");
         System.out.println("   🚀 SISTEMA PORTFOLIO (FULL STACK CLI) 🚀   ");
         System.out.println("=============================================");
-        System.out.println("Tecnologias: Spring Boot | JPA | JDBC | Redis | MinIO | MongoDB");
+        System.out.println("Stack: Spring | JPA | JDBC | Redis | MinIO | MongoDB | PostGIS");
 
         while (sistemaRodando) {
 
             if (currentUser == null) {
-                // ------------------------------------------------
-                // MODO VISITANTE (Não logado)
-                // ------------------------------------------------
+                // MODO VISITANTE
                 exibirMenuVisitante();
                 int opcao = lerOpcao(scanner);
 
                 switch (opcao) {
                     case 1 -> currentUser = authCLI.realizarLogin(scanner);
                     case 2 -> userCLI.cadastrarUsuario(scanner);
-                    case 3 -> userCLI.listarUsuarios(); // Listagem pública
+                    case 3 -> userCLI.listarUsuarios();
                     case 0 -> {
-                        System.out.println("Encerrando sistema...");
+                        System.out.println("Encerrando...");
                         sistemaRodando = false;
                     }
                     default -> System.out.println("❌ Opção inválida.");
                 }
 
             } else {
-                // ------------------------------------------------
-                // MODO LOGADO (Sessão Ativa)
-                // ------------------------------------------------
-                System.out.println("\n👤 LOGADO COMO: " + currentUser.getEmail());
+                // MODO LOGADO
+                System.out.println("\n👤 LOGADO: " + currentUser.getEmail());
                 exibirMenuLogado();
                 int opcao = lerOpcao(scanner);
 
@@ -69,17 +62,17 @@ public class SistemaPortfolioCLI implements CommandLineRunner {
                     case 2 -> projectCLI.cadastrarProjeto(scanner, currentUser);
                     case 3 -> projectCLI.comentarProjeto(scanner, currentUser);
 
-                    case 4 -> reportCLI.gerarRelatorioGeral(); // JDBC (Postgres)
-                    case 5 -> logCLI.exibirLogsAudit();        // MongoDB (Logs)
+                    case 4 -> reportCLI.gerarRelatorioGeral(); // JDBC
+                    case 5 -> logCLI.exibirLogsAudit();        // MongoDB
+                    case 6 -> profileCLI.buscarNetworking(scanner, currentUser); // PostGIS
 
-                    case 6 -> {
-                        // Logout
-                        logService.registrarLog("LOGOUT", "Usuário encerrou a sessão", currentUser.getEmail());
-                        System.out.println("👋 Até logo, " + currentUser.getEmail());
+                    case 7 -> {
+                        logService.registrarLog("LOGOUT", "Saiu do sistema", currentUser.getEmail());
                         currentUser = null;
+                        System.out.println("👋 Logout efetuado.");
                     }
                     case 0 -> {
-                        System.out.println("Encerrando sistema...");
+                        System.out.println("Encerrando...");
                         sistemaRodando = false;
                     }
                     default -> System.out.println("❌ Opção inválida.");
@@ -88,35 +81,33 @@ public class SistemaPortfolioCLI implements CommandLineRunner {
         }
     }
 
-    // --- Métodos Auxiliares de Exibição ---
-
     private void exibirMenuVisitante() {
-        System.out.println("\n--- MENU PRINCIPAL (VISITANTE) ---");
-        System.out.println("1. Entrar (Login)");
-        System.out.println("2. Criar Nova Conta");
-        System.out.println("3. Listar Usuários Cadastrados");
+        System.out.println("\n--- MENU VISITANTE ---");
+        System.out.println("1. Login");
+        System.out.println("2. Criar Conta");
+        System.out.println("3. Listar Usuários");
         System.out.println("0. Sair");
-        System.out.print("👉 Escolha uma opção: ");
+        System.out.print("👉 Opção: ");
     }
 
     private void exibirMenuLogado() {
-        System.out.println("\n--- MENU DO USUÁRIO ---");
-        System.out.println("1. Meu Perfil (Criar/Editar + Upload Foto)");
+        System.out.println("\n--- MENU USUÁRIO ---");
+        System.out.println("1. Meu Perfil (Criar)");
         System.out.println("2. Novo Projeto");
-        System.out.println("3. Comentar em Projetos");
-        System.out.println("--------------------------------");
-        System.out.println("4. [ADMIN] Relatório Analítico (JDBC)");
-        System.out.println("5. [ADMIN] Auditoria de Logs (MongoDB)");
-        System.out.println("--------------------------------");
-        System.out.println("6. Logout (Sair da conta)");
-        System.out.println("0. Fechar Sistema");
-        System.out.print("👉 Escolha uma opção: ");
+        System.out.println("3. Comentar");
+        System.out.println("-----------------------------");
+        System.out.println("4. [JDBC] Relatório Projetos");
+        System.out.println("5. [MONGO] Logs de Auditoria");
+        System.out.println("6. [POSTGIS] Radar Networking");
+        System.out.println("-----------------------------");
+        System.out.println("7. Logout");
+        System.out.println("0. Sair");
+        System.out.print("👉 Opção: ");
     }
 
     private int lerOpcao(Scanner scanner) {
         try {
-            String input = scanner.nextLine();
-            return Integer.parseInt(input);
+            return Integer.parseInt(scanner.nextLine());
         } catch (NumberFormatException e) {
             return -1;
         }

@@ -3,7 +3,7 @@ version: '3.8'
 services:
   # 1. PostgreSQL (Banco Relacional)
   postgres:
-    image: postgres:15
+    image: postgis/postgis:15-3.3 # Imagem oficial com suporte espacial
     container_name: portfolio-postgres
     ports:
       - "5433:5432" # Mapeando 5433 (seu pc) para 5432 (container)
