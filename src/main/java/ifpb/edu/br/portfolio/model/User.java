@@ -10,9 +10,8 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "usuario")
-public class User implements Serializable { // <--- Implementa Serializable
+public class User implements Serializable {
 
-    // É boa prática ter esse ID para garantir compatibilidade entre versões da classe
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -25,25 +24,22 @@ public class User implements Serializable { // <--- Implementa Serializable
     @Column(nullable = false)
     private String senha;
 
-    // Mantendo LocalDateTime e o nome setDataCriacao para corrigir seu erro anterior
-    @Column(name = "criacao_data", updatable = false)
+
+    @Column(name = "data_criacao", updatable = false)
     private LocalDateTime dataCriacao = LocalDateTime.now();
 
-    // --- RELACIONAMENTOS ---
+    // RELACIONAMENTOS
 
-    // 1. Um User tem um Profile (1:1)
+
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Profile profile;
 
-    // 2. Um User escreve muitos Comments (1:N)
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
-    // OBS: Removemos 'projects' daqui, pois o projeto pertence ao PERFIL no diagrama.
 
     public User() {}
 
-    // --- Getters e Setters ---
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public String getEmail() { return email; }
