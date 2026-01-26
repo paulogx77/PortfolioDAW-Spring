@@ -1,13 +1,12 @@
 --liquibase formatted sql
 
--- Habilita a extensão PostGIS
+--changeset denis:2
 CREATE EXTENSION IF NOT EXISTS postgis;
 
--- Adiciona a coluna geométrica na tabela perfil
--- Nota: O Liquibase gerencia erros, então não precisamos de IF NOT EXISTS complexos
+--changeset denis:3
 SELECT AddGeometryColumn('public', 'perfil', 'localizacao', 4326, 'POINT', 2);
 
--- Cria a função de trigger
+--changeset denis:4 splitStatements:false
 CREATE OR REPLACE FUNCTION atualiza_geometria_perfil()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -18,12 +17,13 @@ RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
+--changeset denis:5
 DROP TRIGGER IF EXISTS trg_atualiza_geo ON perfil;
 CREATE TRIGGER trg_atualiza_geo
     BEFORE INSERT OR UPDATE ON perfil
                          FOR EACH ROW EXECUTE FUNCTION atualiza_geometria_perfil();
 
--- Cria a função de busca (Networking)
+--changeset denis:6 splitStatements:false
 CREATE OR REPLACE FUNCTION buscar_usuarios_proximos(
     lat_origem DOUBLE PRECISION,
     lon_origem DOUBLE PRECISION,
